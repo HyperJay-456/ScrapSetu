@@ -20,7 +20,7 @@ Informal collectors sell to intermediary scrap dealers at suppressed prices beca
 
 ---
 
-## 🎯 Key Differentiators & Judge Highlights
+## 🎯 Key Differentiators & Highlights
 
 | Pillar | Industry Problem | ScrapSetu Implementation |
 | :--- | :--- | :--- |
