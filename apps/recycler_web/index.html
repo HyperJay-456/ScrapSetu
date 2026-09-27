@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0284c7">
+  <title>ScrapSetu — Authorized Recycler Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <div class="brand-row">
+        <div class="brand-icon">♻</div>
+        <div>
+          <div class="brand-title" id="recBrandTitle">Recycler<b>Portal</b></div>
+          <div class="brand-sub" id="recBrandSub">ScrapSetu Network</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-link active" data-tab="tab-incoming" id="navIncomingLots">
+          <span>📦</span>
+          <span id="txtNavIncoming">येणारे लॉट (Incoming Lots)</span>
+        </button>
+        <button class="nav-link" data-tab="tab-scan" id="navScanQr">
+          <span>📷</span>
+          <span id="txtNavScan">हस्तांतरण QR स्कॅन (Scan QR)</span>
+        </button>
+        <button class="nav-link" data-tab="tab-history" id="navConfirmedBatches">
+          <span>📜</span>
+          <span id="txtNavHistory">पुष्टी झालेले व्यवहार (History)</span>
+        </button>
+      </nav>
+
+      <!-- FACILITY STATUS CARD -->
+      <div class="facility-card">
+        <div style="font-size: 0.72rem; color: #a7f3d0; font-weight: 800;" id="txtFacAuthorized">अधिकृत सुविधा (AUTHORIZED)</div>
+        <div class="fac-name" id="displayRecName">EcoRecycle Hub Hadapsar</div>
+        <div class="fac-reg">MPCB/RO-PUNE/EW-2024/089</div>
+        <div style="margin-top: 8px; font-size: 0.74rem; color: #94a3b8;" id="txtFacDetails">
+          सेवा परिसर: <b>१८ किमी</b> • पिकअप: <b>सुरू</b>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN BODY -->
+    <main class="main-wrapper">
+
+      <!-- TOP NAVBAR -->
+      <header class="top-navbar">
+        <div>
+          <h1 class="page-title" id="pageHeading">येणारे ई-कचरा लॉट (Incoming Lots)</h1>
+          <div style="font-size: 0.8rem; color: var(--text-muted);" id="pageSubHeading">पडताळणी केलेली ट्रेसिबिलिटी व्यवस्था (Verified Traceability)</div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <!-- LANGUAGE SELECTOR -->
+          <div class="lang-segment-control">
+            <button class="rec-lang-btn active" data-lang="mr">मराठी</button>
+            <button class="rec-lang-btn" data-lang="hi">हिंदी</button>
+            <button class="rec-lang-btn" data-lang="en">English</button>
+          </div>
+
+          <button id="btnRefreshRecycler" class="action-btn-sm" style="background:#f1f5f9; color:var(--text-main); border:1.5px solid var(--border);">
+            <span>↻</span>
+            <span id="txtBtnRefresh">रीफ्रेश (Refresh)</span>
+          </button>
+
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 800; color: #059669;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #059669;"></span>
+            <span id="txtMpcbConnected">MPCB जोडलेले आहे</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENT BODY -->
+      <div class="content-body">
+
+        <!-- ============================================== -->
+        <!-- TAB 1: INCOMING LOTS QUEUE                     -->
+        <!-- ============================================== -->
+        <div id="tab-incoming" class="tab-panel active">
+          <!-- STATS BANNER -->
+          <div class="stats-banner-grid">
+            <div class="stat-box">
+              <div class="s-label" id="lblStatActive">चालू मॅच झालेले लॉट</div>
+              <div class="s-value" id="statIncomingCount">3</div>
+            </div>
+            <div class="stat-box">
+              <div class="s-label" id="lblStatPending">हस्तांतरण प्रलंबित (Tags)</div>
+              <div class="s-value" style="color: #d97706;" id="statPendingHandovers">2</div>
+            </div>
+            <div class="stat-box">
+              <div class="s-label" id="lblStatConfirmedWeight">आज पुष्टी झालेले वजन</div>
+              <div class="s-value" style="color: #059669;" id="statConfirmedWeight">17.5 kg</div>
+            </div>
+            <div class="stat-box">
+              <div class="s-label" id="lblStatEprBonus">संकलकाला दिलेला EPR बोनस</div>
+              <div class="s-value" style="color: #2563eb;" id="statEprBonus">₹385</div>
+            </div>
+          </div>
+
+          <!-- TABLE OF LOTS -->
+          <div class="lots-table-card">
+            <div class="card-header-bar">
+              <div class="table-heading" id="txtTableHeading">थेट संकलक ऑफर व लॉट यादी</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);" id="txtTableSub">अंतर आणि अधिकृत दरावर आधारित क्रमवारी</span>
+            </div>
+
+            <table class="lots-table">
+              <thead>
+                <tr>
+                  <th id="thLotRef">लॉट / संदर्भ (Ref)</th>
+                  <th id="thCategory">सामग्री प्रकार (Category)</th>
+                  <th id="thWeight">वजन (Weight)</th>
+                  <th id="thPrice">दर / एकूण (Price)</th>
+                  <th id="thDistance">अंतर (Distance)</th>
+                  <th id="thStatus">स्थिती (Status)</th>
+                  <th id="thAction">कृती (Action)</th>
+                </tr>
+              </thead>
+              <tbody id="incomingLotsTableBody">
+                <!-- Dynamically populated from API / mock -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- TAB 2: SCAN HANDOVER QR                        -->
+        <!-- ============================================== -->
+        <div id="tab-scan" class="tab-panel">
+          <div class="scan-panel-card">
+            <div style="font-size: 2.2rem;">🏷️</div>
+            <h2 style="margin-top: 6px;" id="txtScanTitle">भौतिक हस्तांतरण टॅग स्कॅन करा</h2>
+            <p style="color: var(--text-muted); font-size: 0.86rem; margin-top: 4px;" id="txtScanSub">
+              पोत्यावर लावलेला QR कोड स्कॅन करा किंवा ६-अंकी संदर्भ कोड टाका.
+            </p>
+
+            <!-- CAMERA SCANNER VIEWPORT SIMULATOR -->
+            <div class="qr-scanner-box">
+              <div class="scanner-laser"></div>
+              <div style="font-size: 2.5rem; opacity: 0.6;">📷</div>
+              <div style="font-size: 0.86rem; margin-top: 8px; color: #94a3b8;" id="txtScannerLaserLabel">
+                कॅमेरा स्कॅनर सक्रिय आहे (Optical Stream Active)
+              </div>
+            </div>
+
+            <!-- MANUAL REF INPUT -->
+            <div class="manual-ref-input-group">
+              <input type="text" id="inputScanRef" class="ref-input" placeholder="उदा. KC-9F31A2" maxlength="12">
+              <button id="btnLookupRef" class="action-btn-sm" style="padding: 0 22px; font-size: 0.95rem;">
+                <span id="txtBtnLookup">शोधा (Lookup)</span>
+              </button>
+            </div>
+
+            <div id="scanResultArea" style="display: none; background: #f8fafc; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 20px; text-align: left; margin-top: 18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <b style="font-size:1.1rem;" id="srLotCategory">PCB Motherboards</b>
+                <span id="srHandoverRef" style="font-family:monospace; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:6px; font-weight:800;">KC-9F31A2</span>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.88rem; margin-bottom:14px;">
+                <div><span id="lblSrDeclaredWeight">नोंदवलेले वजन:</span> <b id="srDeclaredWeight">5.0 kg</b></div>
+                <div><span id="lblSrCollector">संकलक:</span> <b>Ramesh (Hadapsar)</b></div>
+                <div><span id="lblSrRate">अधिकृत दर:</span> <b id="srRate">₹335 / kg</b></div>
+                <div><span id="lblSrEprRate">EPR बोनस:</span> <b style="color:#059669;">+₹22 / kg</b></div>
+              </div>
+
+              <!-- VERIFY SCALE WEIGHT -->
+              <div style="margin: 14px 0; padding: 14px; background: white; border: 1.5px solid var(--border); border-radius: var(--radius-sm);">
+                <label style="font-size: 0.82rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 6px;" id="lblScaleWeight">
+                  सुविधेतील काट्यावरील अचूक वजन (kg):
+                </label>
+                <input type="number" id="inputVerifiedWeight" step="0.1" value="5.0" style="width: 100%; padding: 10px 14px; font-size: 1.2rem; font-weight: 800; border: 1.5px solid var(--border); border-radius: 6px; font-family: 'JetBrains Mono', monospace;">
+              </div>
+
+              <div style="background: #ecfdf5; border-radius: var(--radius-sm); padding: 14px; font-size: 0.88rem; margin-bottom: 16px; border: 1px solid #a7f3d0;">
+                <div style="display:flex; justify-content:space-between;">
+                  <span id="lblScanMatVal">मालाचे मूल्य (Material Value):</span>
+                  <b id="srMaterialPrice">₹1,675.00</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; color:#059669; margin-top:6px;">
+                  <span id="lblScanBonus">फॉर्मल EPR बोनस (+₹२२/किलो):</span>
+                  <b id="srEprBonus">+₹110.00</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:1.05rem; font-weight:800; border-top:1.5px dashed #a7f3d0; padding-top:8px; margin-top:8px;">
+                  <span id="lblScanTotal">संकलकाला एकूण देय रक्कम:</span>
+                  <span id="srTotalPrice" style="color:#065f46;">₹1,785.00</span>
+                </div>
+              </div>
+
+              <button id="btnConfirmReceipt" class="btn-confirm-primary" type="button">
+                <span>✓</span>
+                <span id="txtBtnConfirmReceipt">माल मिळाल्याची पुष्टी करा व लॉट बंद करा</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- TAB 3: CONFIRMED BATCHES HISTORY               -->
+        <!-- ============================================== -->
+        <div id="tab-history" class="tab-panel">
+          <div class="lots-table-card">
+            <div class="card-header-bar">
+              <div class="table-heading" id="txtHistoryHeading">पुष्टी झालेले व ट्रेस करण्यायोग्य व्यवहार</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);" id="txtHistorySub">CPCB/MPCB प्रमाणित लेखापरीक्षण रेकॉर्ड</span>
+            </div>
+
+            <table class="lots-table">
+              <thead>
+                <tr>
+                  <th id="thHistRef">हस्तांतरण संदर्भ (Ref)</th>
+                  <th id="thHistCategory">सामग्री प्रकार (Category)</th>
+                  <th id="thHistWeight">काट्यावरील वजन</th>
+                  <th id="thHistBase">मूळ किंमत</th>
+                  <th id="thHistBonus">EPR बोनस</th>
+                  <th id="thHistTotal">एकूण दिलेले पैसे</th>
+                  <th id="thHistTime">वेळ</th>
+                  <th id="thHistStatus">प्रमाणपत्र स्थिती</th>
+                </tr>
+              </thead>
+              <tbody id="confirmedLotsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- LOT DETAIL MODAL (ACCEPT / REJECT / COUNTER) -->
+  <div id="lotDetailModal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 id="modalLotTitle">लॉट तपासणी तपशील</h3>
+        <button id="btnCloseModal" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted);">✕</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.9rem; margin-bottom: 18px;">
+        <div><span id="lblModalCat">प्रकार:</span> <b id="modalCatName">PCB</b></div>
+        <div><span id="lblModalWeight">वजन:</span> <b id="modalWeight">5.0 kg</b></div>
+        <div><span id="lblModalCondition">स्थिती:</span> <b id="modalCondition">चांगले (Intact)</b></div>
+        <div><span id="lblModalRate">ऑफर दर:</span> <b id="modalRate">₹335 / kg</b></div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 18px;">
+        <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;" id="lblModalValTitle">अंदाजे एकूण देय रक्कम (Estimated Payout)</div>
+        <div style="font-size: 1.45rem; font-weight: 800; color: var(--primary); margin-top:2px;" id="modalTotalVal">₹1,785</div>
+        <div style="font-size: 0.78rem; color: #059669; margin-top: 4px; font-weight:700;" id="lblModalBonusNote">फॉर्मल EPR बोनस समाविष्ट (+₹22/kg)</div>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button id="btnModalAccept" class="action-btn-sm" style="flex:1; background:var(--success); padding:12px;">
+          <span id="txtBtnAccept">✓ स्वीकारा (Accept)</span>
+        </button>
+        <button id="btnModalCounter" class="action-btn-sm" style="flex:1; background:var(--warning); padding:12px;">
+          <span id="txtBtnCounter">⇄ काउंटर ऑफर</span>
+        </button>
+        <button id="btnModalReject" class="action-btn-sm" style="flex:1; background:var(--danger); padding:12px;">
+          <span id="txtBtnReject">✕ नाकारा</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

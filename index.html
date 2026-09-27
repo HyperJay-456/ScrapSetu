@@ -1,14 +1,516 @@
-<!doctype html>
-<html lang="mr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#087254"><title>KabadiConnect</title><link rel="stylesheet" href="style.css"></head>
-<body><main class="app-shell"><section class="mobile">
-<header class="topbar"><div class="brand"><span class="brand-mark">↻</span>Kabadi<span>Connect</span></div><button class="language" id="langButton"><span id="langCode">मराठी</span><small>⌄</small></button><button class="status online" id="networkButton"><i></i><span>Online</span></button></header>
-<div id="view-home" class="view active"><section class="greeting"><p data-i18n="hello">नमस्ते, Ramesh</p><h1 data-i18n="homeTitle">आजची कमाई वाढवा.</h1><p class="muted" data-i18n="homeSub">फक्त फोटो काढा. योग्य भाव मिळवा.</p></section><section class="balance-card"><div><p data-i18n="monthlyEarnings">या महिन्याची कमाई</p><strong>₹ <span>4,850</span></strong><small data-i18n="earningsGrowth">+₹820 मागील महिन्यापेक्षा</small></div><div class="wallet-icon">₹</div></section><div class="section-heading"><h2 data-i18n="marketRates">आजचे बाजार भाव</h2><button data-nav="prices" data-i18n="viewAll">सर्व पहा →</button></div><section id="miniPrices" class="price-list"></section><section class="safety-banner"><div class="safety-icon">⚠</div><div><strong data-i18n="dontBurnBattery">बॅटरी जाळू नका</strong><p data-i18n="safetyTeaser">आग व विषारी धूर टाळा. सुरक्षित हाताळणी पहा.</p></div><button data-nav="safety">›</button></section><div class="section-heading"><h2 data-i18n="activeLots">तुमचे चालू लॉट</h2><button data-nav="lots" data-i18n="viewAll">सर्व पहा →</button></div><section id="activeLot" class="lot-preview"></section><button class="primary cta" id="createLot" data-i18n="addMaterial">＋ नवीन माल जोडा</button></div>
-<div id="view-prices" class="view"><div class="page-title"><button class="back" data-nav="home">←</button><div><h1 data-i18n="marketRates">बाजार भाव</h1><p data-i18n="placeDate">पुणे • आज</p></div><button class="speak" id="speakPrices">🔊</button></div><div class="trend-card"><div><span class="pill" data-i18n="thisWeek">या आठवड्यात</span><h3 data-i18n="pricesStable">भाव स्थिर आहेत</h3><p data-i18n="trendSummary">PCB आणि तांब्याला चांगली मागणी आहे.</p></div><div class="chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="filter-row"><button class="chip selected" data-i18n="all">सर्व</button><button class="chip" data-i18n="ewaste">ई-कचरा</button><button class="chip" data-i18n="cable">केबल</button><button class="chip" data-i18n="battery">बॅटरी</button></div><section id="fullPrices" class="price-list full"></section><p class="source-note" data-i18n="priceSource">भाव परिसरातील अधिकृत रिसायकलर्सच्या ऑफरवर आधारित आहेत.</p></div>
-<div id="view-lots" class="view"><div class="page-title"><button class="back" data-nav="home">←</button><div><h1 data-i18n="myLots">माझा माल</h1><p data-i18n="lotsDescription">फोटोसह नोंदवलेला सर्व माल</p></div></div><section id="lotsList" class="lots-list"></section><button class="primary cta" id="createLot2" data-i18n="addMaterial">＋ नवीन माल जोडा</button></div>
-<div id="view-recyclers" class="view"><div class="page-title"><button class="back" data-nav="home">←</button><div><h1 data-i18n="nearbyRecyclers">जवळचे रिसायकलर</h1><p data-i18n="verifiedFacilities">अधिकृत सुविधा • पुणे</p></div></div><div class="map-card"><span>●</span><b data-i18n="yourLocation">तुमचे ठिकाण</b><i class="pin p1">♻</i><i class="pin p2">♻</i><i class="pin p3">♻</i><div class="map-road r1"></div><div class="map-road r2"></div></div><section id="recyclerList" class="recycler-list"></section></div>
-<div id="view-wallet" class="view"><div class="page-title"><button class="back" data-nav="home">←</button><div><h1 data-i18n="earningsLedger">कमाई खाते</h1><p data-i18n="ledgerSub">तुमचे व्यवहार आणि पैसे</p></div></div><section class="wallet-summary"><div><small data-i18n="totalEarnings">एकूण कमाई</small><strong>₹4,850</strong></div><div><small data-i18n="pending">मिळणे बाकी</small><strong class="orange">₹620</strong></div></section><div class="section-heading ledger-head"><h2 data-i18n="transactions">व्यवहार</h2><button data-i18n="download">डाउनलोड ↓</button></div><section id="ledger" class="ledger"></section></div>
-<div id="view-safety" class="view"><div class="page-title"><button class="back" data-nav="home">←</button><div><h1 data-i18n="safeWork">सुरक्षित काम</h1><p data-i18n="forHealth">तुमच्या आरोग्यासाठी</p></div><button class="speak" id="speakSafety">🔊</button></div><div class="safety-hero">🧤<h2 data-i18n="dontBurnWaste">ई-कचरा जाळू नका</h2><p data-i18n="burnWarning">धूर तुमच्या फुफ्फुसांना आणि कुटुंबाला हानी पोहोचवतो.</p></div><section class="guide" id="safetyGuide"></section></div>
-<nav class="bottom-nav"><button class="nav-item active" data-nav="home"><span>⌂</span><em data-i18n="home">घर</em></button><button class="nav-item" data-nav="prices"><span>₹</span><em data-i18n="prices">भाव</em></button><button class="scan-fab" id="scanNav">⌁</button><button class="nav-item" data-nav="recyclers"><span>♻</span><em data-i18n="recyclers">रिसायकलर</em></button><button class="nav-item" data-nav="wallet"><span>▣</span><em data-i18n="wallet">खाते</em></button></nav></section>
-<aside class="desktop-copy"><span class="eyebrow">HACKATHON MVP</span><h2>Formal recycling,<br><em>made rewarding.</em></h2><p>Inclusive, voice-assisted e-waste collection for a stronger circular economy.</p><div class="feature"><b>✓</b> Fair, transparent local prices</div><div class="feature"><b>✓</b> Traceable handovers & payments</div><div class="feature"><b>✓</b> Marathi, Hindi & English</div></aside></main>
-<dialog id="languageModal"><div class="language-sheet"><div class="modal-head"><div><p>Language / भाषा / भाषा</p><h2>Choose your language</h2></div><button id="closeLanguage">×</button></div><button class="language-option" data-lang="mr"><b>मराठी</b><span>Marathi</span><i>✓</i></button><button class="language-option" data-lang="hi"><b>हिंदी</b><span>Hindi</span><i></i></button><button class="language-option" data-lang="en"><b>English</b><span>English</span><i></i></button></div></dialog>
-<dialog id="lotModal"><form method="dialog" id="lotForm"><div class="modal-head"><div><p data-i18n="newLot">नवीन माल</p><h2 data-i18n="addYourMaterial">तुमचा माल जोडा</h2></div><button type="button" id="closeLot">×</button></div><label class="photo-input">📷<strong data-i18n="takePhoto">फोटो काढा किंवा जोडा</strong><small data-i18n="photoHelp">फोटोमुळे योग्य माल ओळखण्यास मदत होते</small><input id="photo" type="file" accept="image/*" capture="environment"></label><p class="field-label" data-i18n="chooseMaterial">मालाचा प्रकार — ऐकण्यासाठी स्पीकर दाबा</p><section id="materialChoices" class="material-choices"></section><label data-i18n="weightLabel">अंदाजे वजन (किलो)<input id="weight" type="number" min="0.1" step="0.1" value="5"></label><div class="estimate"><span data-i18n="estimatedValue">अंदाजे किंमत</span><strong id="estimate">₹ 900 – 1,050</strong></div><div class="fair-price-note">✓ <span data-i18n="fairPrice">स्थानिक बाजारभावावर आधारित योग्य किंमत</span></div><button class="primary" value="default" data-i18n="createLot">लॉट तयार करा</button></form></dialog><div id="toast" role="status"></div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScrapSetu — MVP Interactive Demo Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #064e3b;
+      --recycler-blue: #0284c7;
+      --bg: #091220;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Banner */
+    .top-portal-bar {
+      background: #111e33;
+      border-bottom: 1.5px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-icon {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+    }
+
+    .brand-title-box h1 {
+      font-size: 1.18rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-title-box p {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Portal Controls Group */
+    .portal-controls-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Language Switcher */
+    .portal-lang-control {
+      display: flex;
+      background: #091220;
+      padding: 3px;
+      border-radius: 9999px;
+      border: 1.5px solid var(--border);
+      gap: 2px;
+    }
+
+    .portal-lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .portal-lang-btn:hover {
+      color: white;
+    }
+    .portal-lang-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+    }
+
+    /* View Selector */
+    .portal-nav-pills {
+      display: flex;
+      background: #091220;
+      padding: 3px;
+      border-radius: 9999px;
+      border: 1.5px solid var(--border);
+      gap: 3px;
+    }
+
+    .portal-pill {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s;
+    }
+
+    .portal-pill.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .portal-pill.recycler.active {
+      background: var(--recycler-blue);
+    }
+
+    .links-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .external-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .external-btn:hover {
+      background: rgba(255,255,255,0.16);
+      transform: translateY(-1px);
+    }
+
+    /* Core Loop Guide Ribbon */
+    .loop-guide-ribbon {
+      background: #070d18;
+      border-bottom: 1.5px solid var(--border);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .loop-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1e293b;
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      color: #e2e8f0;
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .loop-step b {
+      color: #34d399;
+    }
+    .loop-arrow {
+      color: #64748b;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    /* Main Workspace Frames Container */
+    .workspace-split-container {
+      flex: 1;
+      display: flex;
+      padding: 18px 24px;
+      gap: 24px;
+      overflow: hidden;
+      height: calc(100vh - 125px);
+    }
+
+    .panel-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #1e293b;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+      position: relative;
+    }
+
+    .panel-container.collector-panel {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .panel-header-bar {
+      padding: 12px 18px;
+      background: #152238;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .app-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+      flex: 1;
+    }
+
+    /* Layout modes */
+    body.view-collector .workspace-split-container {
+      justify-content: center;
+    }
+    body.view-collector .recycler-panel {
+      display: none;
+    }
+    body.view-collector .collector-panel {
+      flex: 1;
+      max-width: 490px;
+    }
+
+    body.view-recycler .collector-panel {
+      display: none;
+    }
+    body.view-recycler .recycler-panel {
+      flex: 1;
+      display: flex;
+    }
+  </style>
+</head>
+<body class="view-split">
+
+  <!-- TOP PORTAL HEADER -->
+  <header class="top-portal-bar">
+    <div class="brand-group">
+      <div class="brand-logo-icon">↻</div>
+      <div class="brand-title-box">
+        <h1 id="portalMainTitle">स्क्रॅप सेतू — थेट कार्यप्रणाली (ScrapSetu Live MVP)</h1>
+        <p id="portalSubTitle">ऑफलाइन-प्रथम ई-कचरा औपचारिकीकरण आणि ट्रेसिबिलिटी सेतू (Bridge)</p>
+      </div>
+    </div>
+
+    <div class="portal-controls-group">
+      <!-- SYNCHRONIZED LANGUAGE CONTROL -->
+      <div class="portal-lang-control">
+        <button class="portal-lang-btn active" data-lang="mr">मराठी</button>
+        <button class="portal-lang-btn" data-lang="hi">हिंदी</button>
+        <button class="portal-lang-btn" data-lang="en">English</button>
+      </div>
+
+      <!-- VIEW SELECTOR -->
+      <div class="portal-nav-pills">
+        <button class="portal-pill active" id="btnViewSplit">
+          <span>⚏</span>
+          <span id="txtBtnSplit">ड्युअल डेमो (फोन + रिसायकलर)</span>
+        </button>
+        <button class="portal-pill" id="btnViewCollector">
+          <span>📱</span>
+          <span id="txtBtnCollector">संकलक ॲप (Phone)</span>
+        </button>
+        <button class="portal-pill recycler" id="btnViewRecycler">
+          <span>💻</span>
+          <span id="txtBtnRecycler">रिसायकलर वेब (Web)</span>
+        </button>
+      </div>
+
+      <!-- EXTERNAL DIRECT ACCESS -->
+      <div class="links-group">
+        <a href="/collector" id="tabCollectorLink" target="_blank" class="external-btn">
+          <span>↗</span> <span id="txtTabCollector">नवीन टॅब (App)</span>
+        </a>
+        <a href="/recycler" id="tabRecyclerLink" target="_blank" class="external-btn">
+          <span>↗</span> <span id="txtTabRecycler">नवीन टॅब (Portal)</span>
+        </a>
+        <a href="/docs" target="_blank" class="external-btn" style="border-color:#059669; color:#34d399;">
+          <span>📖</span> <span>Swagger API</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- LINEAR CORE LOOP GUIDANCE -->
+  <div class="loop-guide-ribbon" id="loopGuideRibbon">
+    <!-- Populated dynamically based on language -->
+  </div>
+
+  <!-- WORKSPACE SPLIT CONTAINER -->
+  <main class="workspace-split-container">
+
+    <!-- LEFT: COLLECTOR APP MOBILE CONTAINER -->
+    <div class="panel-container collector-panel">
+      <div class="panel-header-bar">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span>📱</span>
+          <span style="color:#34d399;" id="txtPanelCollector">संकलक मोबाईल ॲप (ऑफलाइन-प्रथम)</span>
+        </div>
+        <span style="font-size:0.72rem; color:var(--text-muted);">Android PWA / Flutter Web</span>
+      </div>
+      <iframe src="/collector" class="app-iframe" id="collectorIframe" title="Collector Mobile App"></iframe>
+    </div>
+
+    <!-- RIGHT: RECYCLER DASHBOARD WEB CONTAINER -->
+    <div class="panel-container recycler-panel">
+      <div class="panel-header-bar">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span>💻</span>
+          <span style="color:#38bdf8;" id="txtPanelRecycler">अधिकृत रिसायकलर डॅशबोर्ड</span>
+        </div>
+        <span style="font-size:0.72rem; color:var(--text-muted);" id="txtPanelRecyclerSub">हस्तांतरण पडताळणी व EPR बोनस</span>
+      </div>
+      <iframe src="/recycler" class="app-iframe" id="recyclerIframe" title="Recycler Web Dashboard"></iframe>
+    </div>
+
+  </main>
+
+  <script>
+    const PORTAL_I18N = {
+      mr: {
+        title: 'स्क्रॅप सेतू — थेट कार्यप्रणाली (ScrapSetu Live MVP)',
+        sub: 'ऑफलाइन-प्रथम ई-कचरा औपचारिकीकरण आणि ट्रेसिबिलिटी सेतू (Bridge)',
+        btnSplit: 'ड्युअल डेमो (फोन + रिसायकलर)',
+        btnCollector: 'संकलक ॲप (Phone)',
+        btnRecycler: 'रिसायकलर वेब (Web)',
+        tabCollector: 'नवीन टॅब (App)',
+        tabRecycler: 'नवीन टॅब (Portal)',
+        panelCollector: 'संकलक मोबाईल ॲप (ऑफलाइन-प्रथम)',
+        panelRecycler: 'अधिकृत रिसायकलर डॅशबोर्ड',
+        panelRecyclerSub: 'हस्तांतरण पडताळणी व EPR बोनस',
+        steps: [
+          '१ ऑफलाइन लॉट', '२ AI वर्गीकरण', '३ वजन व किंमत अंदाज',
+          '४ रिसायकलर जुळवणी', '५ QR हस्तांतरण', '६ रिसायकलर स्कॅन',
+          '७ पावती पुष्टी', '८ संकलक वही', '९ सिंक'
+        ]
+      },
+      hi: {
+        title: 'स्क्रैप सेतु — लाइव डेमो पोर्टल (ScrapSetu Live MVP)',
+        sub: 'ऑफ़लाइन-प्रथम ई-कचरा औपचारिकीकरण एवं ट्रैसेबिलिटी सेतु (Bridge)',
+        btnSplit: 'ड्यूल डेमो (फोन + रीसाइक्लर)',
+        btnCollector: 'कलेक्टर ऐप (Phone)',
+        btnRecycler: 'रीसाइक्लर वेब (Web)',
+        tabCollector: 'नया टैब (App)',
+        tabRecycler: 'नया टैब (Portal)',
+        panelCollector: 'कलेक्टर मोबाइल ऐप (ऑफ़लाइन-प्रथम)',
+        panelRecycler: 'अधिकृत रीसाइक्लर डैशबोर्ड',
+        panelRecyclerSub: 'हस्तांतरण सत्यापन एवं EPR बोनस',
+        steps: [
+          '1 ऑफ़लाइन लॉट', '2 AI वर्गीकरण', '3 वजन व मूल्य अनुमान',
+          '4 रीसाइक्लर मैचिंग', '5 QR हस्तांतरण', '6 रीसाइक्लर स्कैन',
+          '7 पावती पुष्टि', '8 कलेक्टर बहीखाता', '9 सिंक'
+        ]
+      },
+      en: {
+        title: 'ScrapSetu — MVP Interactive Demo Portal',
+        sub: 'Offline-First E-Waste Formalization & Traceability Bridge',
+        btnSplit: 'Dual Demo (Phone + Recycler)',
+        btnCollector: 'Collector Mobile Only',
+        btnRecycler: 'Recycler Web Only',
+        tabCollector: 'Open App Tab',
+        tabRecycler: 'Open Recycler Tab',
+        panelCollector: 'Collector Mobile App (Offline-First)',
+        panelRecycler: 'Authorized Recycler Dashboard',
+        panelRecyclerSub: 'Traceable Handover & EPR Bonus',
+        steps: [
+          '1 Offline Lot', '2 AI Classify', '3 Weight & Value',
+          '4 Match Recycler', '5 QR Handover', '6 Recycler Scan',
+          '7 Confirm Receipt', '8 Collector Ledger', '9 Sync'
+        ]
+      }
+    };
+
+    let activePortalLang = localStorage.getItem('kc_portal_lang') || 'mr';
+
+    function setPortalLanguage(lang) {
+      activePortalLang = lang;
+      localStorage.setItem('kc_portal_lang', lang);
+      const texts = PORTAL_I18N[lang] || PORTAL_I18N.mr;
+
+      document.querySelectorAll('.portal-lang-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === lang) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      document.getElementById('portalMainTitle').textContent = texts.title;
+      document.getElementById('portalSubTitle').textContent = texts.sub;
+      document.getElementById('txtBtnSplit').textContent = texts.btnSplit;
+      document.getElementById('txtBtnCollector').textContent = texts.btnCollector;
+      document.getElementById('txtBtnRecycler').textContent = texts.btnRecycler;
+      document.getElementById('txtTabCollector').textContent = texts.tabCollector;
+      document.getElementById('txtTabRecycler').textContent = texts.tabRecycler;
+      document.getElementById('txtPanelCollector').textContent = texts.panelCollector;
+      document.getElementById('txtPanelRecycler').textContent = texts.panelRecycler;
+      document.getElementById('txtPanelRecyclerSub').textContent = texts.panelRecyclerSub;
+
+      // Render ribbon steps
+      const ribbon = document.getElementById('loopGuideRibbon');
+      if (ribbon) {
+        ribbon.innerHTML = `<span style="font-weight: 800; color: #38bdf8;">${lang === 'en' ? 'CORE LOOP:' : (lang === 'hi' ? 'मुख्य लूप:' : 'मुख्य लूप:')}</span>` +
+          texts.steps.map((s, idx) => `<span class="loop-step"><b>${idx+1}</b> ${s.replace(/^[0-9१-९]+\s*/, '')}</span>`).join('<span class="loop-arrow">→</span>');
+      }
+
+      // Broadcast language change to both child iframes
+      const colFrame = document.getElementById('collectorIframe');
+      const recFrame = document.getElementById('recyclerIframe');
+      colFrame?.contentWindow?.postMessage({ type: 'SET_LANGUAGE', lang: lang }, '*');
+      recFrame?.contentWindow?.postMessage({ type: 'SET_LANGUAGE', lang: lang }, '*');
+    }
+
+    // Language buttons
+    document.querySelectorAll('.portal-lang-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const lang = e.currentTarget.getAttribute('data-lang');
+        setPortalLanguage(lang);
+      });
+    });
+
+    // View Switching
+    const body = document.body;
+    const btnSplit = document.getElementById('btnViewSplit');
+    const btnCol = document.getElementById('btnViewCollector');
+    const btnRec = document.getElementById('btnViewRecycler');
+
+    btnSplit.addEventListener('click', () => {
+      body.className = 'view-split';
+      btnSplit.classList.add('active');
+      btnCol.classList.remove('active');
+      btnRec.classList.remove('active');
+    });
+
+    btnCol.addEventListener('click', () => {
+      body.className = 'view-collector';
+      btnCol.classList.add('active');
+      btnSplit.classList.remove('active');
+      btnRec.classList.remove('active');
+    });
+
+    btnRec.addEventListener('click', () => {
+      body.className = 'view-recycler';
+      btnRec.classList.add('active');
+      btnSplit.classList.remove('active');
+      btnCol.classList.remove('active');
+    });
+
+    // File protocol graceful fallback for standalone inspection
+    if (window.location.protocol === 'file:') {
+      const colPath = 'apps/collector_app/index.html';
+      const recPath = 'apps/recycler_web/index.html';
+      const cFrame = document.getElementById('collectorIframe');
+      const rFrame = document.getElementById('recyclerIframe');
+      if (cFrame) cFrame.src = colPath;
+      if (rFrame) rFrame.src = recPath;
+      const cLink = document.getElementById('tabCollectorLink');
+      const rLink = document.getElementById('tabRecyclerLink');
+      if (cLink) cLink.href = colPath;
+      if (rLink) rLink.href = recPath;
+    }
+
+    // Initial setup
+    setPortalLanguage(activePortalLang);
+
+    // Re-broadcast after iframes finish loading
+    window.addEventListener('load', () => {
+      setTimeout(() => setPortalLanguage(activePortalLang), 500);
+    });
+  </script>
+</body>
+</html>

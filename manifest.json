@@ -1,0 +1,19 @@
+{
+  "name": "ScrapSetu",
+  "short_name": "ScrapSetu",
+  "description": "Traceable, offline-first digital bridge between informal e-waste collectors and authorized recyclers",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f8f6",
+  "theme_color": "#087254",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "mr"
+}

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#059669">
+  <title>ScrapSetu — Collector App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- MOBILE DEVICE SHELL -->
+  <div class="mobile-device-frame">
+
+    <!-- TOP SYSTEM STATUS & CONTROLS -->
+    <header class="phone-top-notch">
+      <div class="brand-badge">
+        <span class="logo-icon">↻</span>
+        <span id="collectorBrandName">स्क्रॅप<b>सेतू</b></span>
+      </div>
+
+      <div class="top-controls">
+        <!-- OFFLINE / ONLINE TOGGLE (AIRPLANE MODE SIMULATION) -->
+        <button id="networkToggleBtn" class="network-pill online" title="Toggle Offline / Online state">
+          <span class="pulse-circle"></span>
+          <span id="networkLabel">Live Online</span>
+        </button>
+
+        <!-- LANGUAGE SWITCHER BUTTON -->
+        <button id="langSelectBtn" class="lang-pill" title="भाषा बदला">
+          🌐 <span id="currentLangLabel">मराठी</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- TOAST ALERT -->
+    <div id="toastMessage" class="toast-msg"></div>
+
+    <!-- MAIN APP SCREENS -->
+    <main class="app-screen-container">
+
+      <!-- ============================================== -->
+      <!-- SCREEN 1: LANGUAGE SELECTION MODAL/SCREEN       -->
+      <!-- ============================================== -->
+      <section id="screen-language" class="screen">
+        <div class="language-hero-box">
+          <div style="font-size: 3rem; margin-bottom: 8px;">🗣️</div>
+          <h2>आपली भाषा निवडा</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
+            Choose your preferred language / अपनी भाषा चुनें
+          </p>
+
+          <div class="lang-grid">
+            <button class="lang-card-btn selected" data-lang="mr">
+              <span>मराठी (महाराष्ट्र)</span>
+              <span>✓</span>
+            </button>
+            <button class="lang-card-btn" data-lang="hi">
+              <span>हिंदी (Hindi)</span>
+              <span></span>
+            </button>
+            <button class="lang-card-btn" data-lang="en">
+              <span>English (Default)</span>
+              <span></span>
+            </button>
+          </div>
+
+          <button id="btnConfirmLang" class="cta-create-btn" style="margin-top: 28px;">
+            पुढे जा (Continue) →
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 2: HOME / PRICE BOARD                   -->
+      <!-- ============================================== -->
+      <section id="screen-home" class="screen active">
+        <!-- WELCOME HERO -->
+        <div class="welcome-hero">
+          <div style="font-size: 0.85rem; color: #a7f3d0; font-weight: 600;" id="txtGreetingSub">पुणे • थेट अधिकृत बाजारभाव</div>
+          <h2 style="font-size: 1.45rem; font-weight: 800; margin-top: 2px;" id="txtGreeting">नमस्ते, रमेश भाऊ 👋</h2>
+          <p style="font-size: 0.85rem; margin-top: 4px; opacity: 0.9;" id="txtHeroTag">कचऱ्याला द्या योग्य भाव, थेट अधिकृत रिसायकलरशी जोडा.</p>
+
+          <div class="hero-stats-row">
+            <div class="hero-stat-item">
+              <span class="stat-sub" id="lblTotalEarned">एकूण कमाई</span>
+              <span class="stat-val" id="valHomeTotal">₹4,850</span>
+            </div>
+            <div class="hero-stat-item" style="text-align: right;">
+              <span class="stat-sub" id="lblPendingDues">येणे बाकी</span>
+              <span class="stat-val" style="color: #fde68a;" id="valHomePending">₹1,240</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- VOICE ASSISTANT: SPEAK TODAY'S RATES -->
+        <button id="btnSpeakPrices" class="audio-voice-btn" type="button">
+          <span style="font-size: 1.25rem;">🔊</span>
+          <span id="txtSpeakRates">आजचे भाव ऐका (बोलो भाव)</span>
+        </button>
+
+        <!-- LIVE PRICE BOARD -->
+        <div class="section-title-row">
+          <div class="section-title">
+            <span>📊</span>
+            <span id="txtPriceBoardTitle">आजचे ई-कचरा दर (प्रती किलो)</span>
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;" id="txtPriceSource">अधिकृत MPCB दर</span>
+        </div>
+
+        <div id="priceCardsContainer" class="price-cards-list">
+          <!-- Populated dynamically from API / local fallback -->
+        </div>
+
+        <!-- PRIMARY CALL TO ACTION -->
+        <button id="btnGoToCreateLot" class="cta-create-btn" type="button">
+          <span>＋</span>
+          <span id="txtBtnCreateLot">नवीन माल जोडा (Create Lot)</span>
+        </button>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 3: CREATE LOT (CAMERA + AI + WEIGHT)   -->
+      <!-- ============================================== -->
+      <section id="screen-create" class="screen">
+        <div class="section-title-row">
+          <div class="section-title">
+            <span>📦</span>
+            <span id="txtCreateLotTitle">नवीन मालाची नोंद करा</span>
+          </div>
+          <button id="btnCancelCreate" style="background:none; border:none; color:var(--text-muted); font-weight:700; cursor:pointer;">
+            ✕
+          </button>
+        </div>
+
+        <div class="create-lot-card">
+          <!-- 1. CAMERA PHOTO CAPTURE BOX -->
+          <div id="cameraDropBox" class="camera-drop-box">
+            <input type="file" id="cameraFileInput" accept="image/*" capture="environment" style="display:none;">
+            <img id="cameraPreviewImg" class="camera-preview-img" alt="Captured Waste Lot">
+            <div id="cameraPromptContent">
+              <div style="font-size: 2.4rem; margin-bottom: 6px;">📷</div>
+              <b style="font-size: 0.95rem; color: var(--text-main);" id="txtPhotoPrompt">फोटो काढा किंवा निवडा</b>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;" id="txtPhotoSub">
+                AI कॅमेरा मालाचा प्रकार आपोआप ओळखेल (Offline Ready)
+              </p>
+            </div>
+          </div>
+
+          <!-- 2. ON-DEVICE AI CLASSIFICATION RESULT -->
+          <div id="aiResultBadge" class="ai-result-badge">
+            <div class="ai-header-row">
+              <span>🤖 AI ओळख (On-Device Model)</span>
+              <span id="aiConfidenceBadge" class="confidence-meter">94% अचूक</span>
+            </div>
+            <div class="ai-category-title">
+              <span id="aiCatIcon">💻</span>
+              <span id="aiCatName">PCB (Circuit Boards)</span>
+            </div>
+            <div style="font-size: 0.72rem; color: #166534; margin-top: 4px;" id="aiCatNote">
+              बरोबर नसल्यास खालील पर्यायांमधून निवडा:
+            </div>
+          </div>
+
+          <!-- 3. MANUAL CATEGORY GRID (HERO 3 + 2 EXTENSIONS) -->
+          <div style="margin-top: 14px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;" id="txtSelectCat">
+              प्रकार निवडा:
+            </div>
+            <div class="category-picker-grid">
+              <button class="cat-select-btn active" data-id="1" data-name="PCB" data-rate="315">
+                <div class="cat-btn-icon">💻</div>
+                <div class="cat-btn-label">PCB</div>
+              </button>
+              <button class="cat-select-btn" data-id="2" data-name="Cables" data-rate="410">
+                <div class="cat-btn-icon">🔌</div>
+                <div class="cat-btn-label">Cables</div>
+              </button>
+              <button class="cat-select-btn" data-id="3" data-name="LCD" data-rate="115">
+                <div class="cat-btn-icon">🖥️</div>
+                <div class="cat-btn-label">LCD</div>
+              </button>
+              <button class="cat-select-btn" data-id="4" data-name="CRT" data-rate="52">
+                <div class="cat-btn-icon">📺</div>
+                <div class="cat-btn-label">CRT (धोकादायक)</div>
+              </button>
+              <button class="cat-select-btn" data-id="5" data-name="Batteries" data-rate="105">
+                <div class="cat-btn-icon">🔋</div>
+                <div class="cat-btn-label">Batteries (बॅटरी)</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. WEIGHT INPUT (STEPPER & SLIDER) -->
+          <div class="weight-section">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted);" id="txtWeightLabel">
+              अंदाजे वजन (Approx Weight):
+            </div>
+            <div class="weight-display-box">
+              <div>
+                <span id="displayWeightNum" class="weight-num">5.0</span>
+                <span class="weight-unit">किलो (kg)</span>
+              </div>
+              <div class="stepper-btn-group">
+                <button id="btnWeightMinus" class="step-btn" type="button">−</button>
+                <button id="btnWeightPlus" class="step-btn" type="button">＋</button>
+              </div>
+            </div>
+            <input type="range" id="weightSlider" class="weight-range-slider" min="0.5" max="100" step="0.5" value="5.0">
+          </div>
+
+          <!-- 5. ESTIMATED VALUE BANNER -->
+          <div class="estimate-banner">
+            <div>
+              <div class="est-label" id="txtEstValueLabel">अंदाजे सरकारी/बाजार किंमत</div>
+              <div style="font-size: 0.72rem; color: #cbd5e1;" id="txtEstSubLabel">स्थानिक दरावर आधारित</div>
+            </div>
+            <div id="displayEstimatedPrice" class="est-value">₹1,575</div>
+          </div>
+
+          <!-- SUBMIT LOT & FIND RECYCLER -->
+          <button id="btnFindRecycler" class="cta-create-btn" type="button">
+            <span>🔍</span>
+            <span id="txtBtnFindRecycler">रिसायकलर शोधा (Find Matches)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 4: RECYCLER MATCHES (EXPLAINABLE)      -->
+      <!-- ============================================== -->
+      <section id="screen-matches" class="screen">
+        <div class="section-title-row">
+          <div class="section-title">
+            <span>♻️</span>
+            <span id="txtMatchesTitle">अधिकृत रिसायकलर शिफारसी</span>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--primary); font-weight: 700;">MPCB Registered</span>
+        </div>
+
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;" id="txtMatchesDesc">
+          पारदर्शक मूल्यांकन: ३०% अंतर + ३०% दर + २५% परवाना + १५% पिकअप
+        </p>
+
+        <!-- RECYCLER CARDS LIST -->
+        <div id="recyclerListContainer" class="recycler-cards-list">
+          <!-- Populated dynamically with weights & match score -->
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 5: HANDOVER (PHYSICAL-DIGITAL TAG)      -->
+      <!-- ============================================== -->
+      <section id="screen-handover" class="screen">
+        <div class="handover-card">
+          <div style="font-size: 2.4rem;">🏷️</div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; margin-top: 4px;" id="txtHandoverTitle">
+            हस्तांतरण QR कोड व कोड
+          </h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;" id="txtHandoverSub">
+            हा QR कोड किंवा संदर्भ क्रमांक तुमच्या पोत्यावर/मालावर चिकटवा.
+          </p>
+
+          <!-- SHORT HANDOVER REFERENCE CODE (e.g. KC-9F31A2) -->
+          <div class="handover-code-box">
+            <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 800;" id="lblHandoverRefCode">हस्तांतरण संदर्भ (REF CODE)</div>
+            <div id="displayHandoverRef" class="handover-ref-text">KC-9F31A2</div>
+          </div>
+
+          <!-- OFFLINE SCANNABLE QR CODE -->
+          <div id="handoverQrHolder" class="qr-code-holder">
+            <!-- Rendered by QRCodeUtil -->
+          </div>
+
+          <!-- SUMMARY DETAILS -->
+          <div style="background: #f8fafc; border-radius: var(--radius-sm); padding: 12px; font-size: 0.85rem; margin-top: 10px; text-align: left; border: 1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted);" id="lblSelectedRec">निवडलेला रिसायकलर:</span>
+              <b id="txtHandoverRecName">EcoRecycle Hub Hadapsar</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted);" id="lblWeightCat">वजन व प्रकार:</span>
+              <b id="txtHandoverWeightCat">5.0 kg • PCB</b>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:var(--text-muted);" id="lblGpsLocation">GPS स्थान:</span>
+              <span id="txtHandoverGps" style="font-family:monospace; font-size:0.78rem;">18.5204° N, 73.8567° E</span>
+            </div>
+          </div>
+
+          <!-- STATUS LIVE BANNER -->
+          <div class="status-live-banner" id="handoverStatusBanner">
+            <span>⏳</span>
+            <span id="txtWaitingConfirm">रिसायकलरच्या स्कॅनची वाट पाहत आहे...</span>
+          </div>
+
+          <!-- DEMO / TEST BUTTON: SIMULATE INSTANT RECYCLER SCAN -->
+          <button id="btnSimulateRecyclerScan" class="cta-create-btn" style="background:#0284c7; margin-top:14px;" type="button">
+            <span>⚡</span>
+            <span id="txtBtnSimulateScan">रिसायकलर स्कॅन डेमो (Confirm)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 6: EARNINGS LEDGER                      -->
+      <!-- ============================================== -->
+      <section id="screen-ledger" class="screen">
+        <div class="section-title-row">
+          <div class="section-title">
+            <span>📊</span>
+            <span id="txtLedgerTitle">कमाई खाते व व्यवहार वही (Ledger)</span>
+          </div>
+          <button id="btnManualSync" class="network-pill online" style="cursor:pointer;" title="Sync offline queue">
+            <span>↻</span>
+            <span id="txtSyncBtnLabel">Sync</span>
+          </button>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="ledger-stat-cards">
+          <div class="l-card earned">
+            <div class="l-title" id="txtTotalEarnedTitle">एकूण मिळालेले पैसे</div>
+            <div id="valLedgerEarned" class="l-val" style="color:var(--primary-dark);">₹4,850</div>
+            <div class="bonus-highlight-pill" style="margin-top:6px;">
+              <span>🎁</span>
+              <span id="bonusHighlightText">फॉर्मल EPR बोनस समाविष्ट</span>
+            </div>
+          </div>
+          <div class="l-card pending">
+            <div class="l-title" id="txtPendingTitle">जमा होणे बाकी (Pending)</div>
+            <div id="valLedgerPending" class="l-val" style="color:#d97706;">₹1,240</div>
+            <div style="font-size:0.74rem; color:var(--text-muted); margin-top:6px;" id="txtPendingSub">१ व्यवहार पडताळणीत</div>
+          </div>
+        </div>
+
+        <!-- TRANSACTIONS TIMELINE -->
+        <div class="section-title" style="margin: 14px 0 8px;">
+          <span>📜</span>
+          <span id="txtTxHistory">व्यवहार इतिहास (Transactions)</span>
+        </div>
+
+        <div id="txListContainer" class="transactions-list">
+          <!-- Populated dynamically with transactions & Formal Bonus tags -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- SHALLOW BOTTOM NAVIGATION (HOME · CREATE · LEDGER) -->
+    <nav class="bottom-nav-bar">
+      <button class="b-nav-item active" data-target="screen-home">
+        <span class="b-nav-icon">⌂</span>
+        <span id="navHome">भाव (Home)</span>
+      </button>
+      <button class="b-nav-item" data-target="screen-create">
+        <span class="b-nav-icon" style="background:var(--primary); color:white; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:-4px;">＋</span>
+        <span id="navCreate" style="margin-top:4px;">नवीन माल</span>
+      </button>
+      <button class="b-nav-item" data-target="screen-ledger">
+        <span class="b-nav-icon">▣</span>
+        <span id="navLedger">खाते (Ledger)</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="classifier.js"></script>
+  <script src="db.js"></script>
+  <script src="qrcode_util.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
